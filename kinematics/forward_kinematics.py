@@ -24,7 +24,7 @@ from numpy.matlib import matrix, identity
 from joint_control.angle_interpolation import AngleInterpolationAgent
 import math
 import numpy as np
-from joint_control.keyframes import hello
+from joint_control.keyframes import hello, leftBackToStand
 
 
 class ForwardKinematicsAgent(AngleInterpolationAgent):
@@ -94,5 +94,5 @@ class ForwardKinematicsAgent(AngleInterpolationAgent):
 
 if __name__ == '__main__':
     agent = ForwardKinematicsAgent()
-    agent.keyframes = hello()
+    agent.keyframes = leftBackToStand()
     agent.run()

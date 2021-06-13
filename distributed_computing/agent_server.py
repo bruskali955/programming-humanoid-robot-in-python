@@ -41,7 +41,7 @@ class ServerAgent(InverseKinematicsAgent):
         self.posture = 'unknown'
         robot_pose_data.close()
         # create server
-        self.server = SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler, allow_none=True)
+        self.server = SimpleXMLRPCServer(('localhost', 3100), requestHandler=RequestHandler, allow_none=True)
         self.server.register_introspection_functions()
         self.server.register_multicall_functions()
         self.server.register_instance(self)

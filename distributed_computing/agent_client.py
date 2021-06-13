@@ -11,9 +11,11 @@ import weakref
 import xmlrpc.client as rpc
 from joint_control.keyframes import hello, leftBackToStand
 
+
 class PostHandler(object):
     '''the post hander wraps function to be excuted in paralle
     '''
+
     def __init__(self, obj):
         self.proxy = weakref.proxy(obj)
 
@@ -26,17 +28,19 @@ class PostHandler(object):
     def set_transform(self, effector_name, transform):
         '''non-blocking call of ClientAgent.set_transform'''
         # YOUR CODE HERE
-        thread = threading.Thread(target=self.proxy.set_transform(effector_name, transform), args=[effector_name, transform])
+        thread = threading.Thread(target=self.proxy.set_transform(effector_name, transform),
+                                  args=[effector_name, transform])
         thread.start()
 
 
 class ClientAgent(object):
     '''ClientAgent request RPC service from remote server
     '''
+
     # YOUR CODE HERE
     def __init__(self):
-        print ('this is a client')
-        self.client = rpc.ServerProxy("http://localhost:8000", allow_none=True)
+        print('this is a client')
+        self.client = rpc.ServerProxy("http://localhost:3100", allow_none=True)
         self.post = PostHandler(self.client)
 
     def get_angle(self, joint_name):
@@ -48,7 +52,7 @@ class ClientAgent(object):
         '''set target angle of joint for PID controller
         '''
         # YOUR CODE HERE
-        self.client.set_angle(joint_name, angle)
+        return self.client.set_angle(joint_name, angle)
 
     def get_posture(self):
         '''return current posture of robot'''
@@ -59,9 +63,8 @@ class ClientAgent(object):
         '''excute keyframes, note this function is blocking call,
         e.g. return until keyframes are executed
         '''
-        for i in range(len(keyframes)):
-            self.client.execute_keyframes(keyframes)
-
+        # for i in range(len(keyframes)):
+        return self.client.execute_keyframes(keyframes)
 
     def get_transform(self, name):
         '''get transform with given name
@@ -73,14 +76,15 @@ class ClientAgent(object):
         '''
         self.client.set_transform(effector_name, transform)
 
+
 if __name__ == '__main__':
     agent = ClientAgent()
     # TEST CODE HERE
     # agent.execute_keyframes(hello())
     # time.sleep(6)
     agent.execute_keyframes(leftBackToStand())
-    while(True):
+    while (True):
         print('Current posture is ''"' + agent.get_posture() + '"')
     # time.sleep(8)
-    #print (agent.get_transform('RAnkleRoll'))
-    #print('Current posture is ''"' + agent.get_posture() + '"')
+    # print (agent.get_transform('RAnkleRoll'))
+    # print('Current posture is ''"' + agent.get_posture() + '"')
